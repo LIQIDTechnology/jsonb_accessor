@@ -3,9 +3,12 @@ lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "jsonb_accessor/version"
 
+java = (RUBY_PLATFORM == "java")
+
 Gem::Specification.new do |spec|
   spec.name                  = "jsonb_accessor"
   spec.version               = JsonbAccessor::VERSION
+  spec.platform              = java ? "java" : Gem::Platform::RUBY
   spec.authors               = ["Michael Crismali", "Joe Hirn"]
   spec.email                 = ["michael.crismali@gmail.com", "joe@devmynd.com"]
 
@@ -21,7 +24,8 @@ Gem::Specification.new do |spec|
   spec.require_paths         = ["lib"]
 
   spec.add_dependency "activerecord", ">= 4.2.1"
-  spec.add_dependency "pg"
+  spec.add_dependency "pg" unless java
+  spec.add_dependency "activerecord-jdbcpostgresql-adapter" if java
 
   spec.add_development_dependency "actionpack", "~> 4.2.1"
   spec.add_development_dependency "appraisal"
